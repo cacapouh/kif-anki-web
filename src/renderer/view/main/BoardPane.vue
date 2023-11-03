@@ -156,8 +156,8 @@
           <!-- <button class="control-item" data-hotkey="Control+," @click="onOpenAppSettings">
             <Icon :icon="IconType.SETTINGS" />
             <span>{{ t.appSettings }}</span>
-          </button>
-          <button
+          </button> -->
+          <!-- <button
             class="control-item"
             data-hotkey="Control+."
             :disabled="!controlStates.engineSettings"
@@ -165,16 +165,16 @@
           >
             <Icon :icon="IconType.ENGINE_SETTINGS" />
             <span>{{ t.engineSettings }}</span>
-          </button>
-          <button class="control-item" data-hotkey="Control+t" @click="onFlip">
+          </button> -->
+          <!-- <button class="control-item" data-hotkey="Control+t" @click="onFlip">
             <Icon :icon="IconType.FLIP" />
             <span>{{ t.flipBoard }}</span>
-          </button>
+          </button> -->
           <button class="control-item" @click="onFileAction">
             <Icon :icon="IconType.FILE" />
             <span>{{ t.file }}</span>
           </button>
-          <button
+          <!-- <button
             class="control-item"
             data-hotkey="Control+d"
             :disabled="!controlStates.removeCurrentMove"
