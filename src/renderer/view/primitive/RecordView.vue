@@ -36,6 +36,12 @@
           </div>
         </div>
       </div>
+      <div class="url-background">
+        &nbsp;棋譜URL:
+        <a :href="`${url}`">{{ truncate(url) }}</a>
+        <br/>
+        <button style="padding:10px;width: 100%;" @click="copyRecordKIFUrl">URLをコピー</button>
+      </div>
     </div>
     <div class="auto row branch-list-area" style="display: none">
       <!-- HACK: div自体をコメントアウトすると将棋盤が操作できるなるので、display: noneにしている -->
@@ -88,8 +94,10 @@ import { ImmutableRecord, ImmutableNode } from "@/common/shogi";
 import { computed, ref, PropType, onUpdated } from "vue";
 import Icon from "@/renderer/view/primitive/Icon.vue";
 import { IconType } from "@/renderer/assets/icons";
-import ToggleButton from "./ToggleButton.vue";
+// import ToggleButton from "./ToggleButton.vue";
+import { useStore } from "@/renderer/store";
 
+const store = useStore();
 const props = defineProps({
   record: {
     type: Object as PropType<ImmutableRecord>,
@@ -185,6 +193,15 @@ const swapWithNextBranch = () => {
     emit("swapWithNextBranch");
   }
 };
+const url = computed(() => {
+  return store.getRecordKIFUrl();
+});
+const truncate = (str: string) => {
+  return str.substring(0, 52) + "...";
+};
+const copyRecordKIFUrl = () => {
+  store.copyRecordKIFUrl();
+};
 
 const branches = computed(() => {
   if (!props.record.branchBegin.branch) {
@@ -197,7 +214,6 @@ const branches = computed(() => {
   }
   return ret;
 });
-
 onUpdated(() => {
   const moveListElement = moveList.value as HTMLElement;
   moveListElement.childNodes.forEach((elem) => {
@@ -250,6 +266,15 @@ onUpdated(() => {
   overflow-x: hidden;
   overflow-y: auto;
   color: var(--text-color);
+}
+.url-background {
+  z-index: -1;
+  top: 0;
+  left: 0;
+  text-align: left;
+  width: 100%;
+  color: black;
+  background-color: var(--text-bg-color);
 }
 .branch-list-area {
   position: relative;

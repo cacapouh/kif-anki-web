@@ -1,7 +1,7 @@
 import { Texts } from "../text_template";
 
 export const ja: Texts = {
-  electronShogi: "Electron将棋",
+  electronShogi: "棋譜暗記Web",
   clear: "初期化",
   open: "開く",
   saveOverwrite: "上書き保存",
