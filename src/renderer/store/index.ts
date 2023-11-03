@@ -905,19 +905,13 @@ class Store {
   }
 
   getRecordKIFUrl(): string {
-    const appSetting = useAppSetting();
-    const kifData = exportKIF(this.recordManager.record, {
-      returnCode: appSetting.returnCode,
-    });
-    // TODO: 文字列圧縮する
-    const encodedKifData = encodeURIComponent(btoa(unescape(encodeURIComponent(kifData))));
+    const encodedKifData = encodeURIComponent(this.recordManager.record.sfen);
     const currentUrl = new URL(window.location.href);
-    currentUrl.searchParams.append("data", encodedKifData);
+    currentUrl.searchParams.append("sfen", encodedKifData);
     const kifUrl = currentUrl.toString();
     return kifUrl;
   }
   copyRecordKIFUrl(): void {
-    //
     navigator.clipboard.writeText(this.getRecordKIFUrl());
   }
 
