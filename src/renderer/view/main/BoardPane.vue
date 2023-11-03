@@ -36,7 +36,7 @@
             hidden: appSetting.rightSideControlType === RightSideControlType.NONE,
           }"
         >
-          <button v-if="controlStates.game" class="control-item" @click="onGame">
+          <!-- <button v-if="controlStates.game" class="control-item" @click="onGame">
             <Icon :icon="IconType.GAME" />
             <span>{{ t.game }}</span>
           </button>
@@ -142,7 +142,7 @@
           </button>
           <button v-if="controlStates.initPosition" class="control-item" @click="onInitPosition">
             <span>{{ t.initializePosition }}</span>
-          </button>
+          </button> -->
         </div>
       </template>
       <template #left-control>
@@ -153,7 +153,7 @@
             hidden: appSetting.leftSideControlType === LeftSideControlType.NONE,
           }"
         >
-          <button class="control-item" data-hotkey="Control+," @click="onOpenAppSettings">
+          <!-- <button class="control-item" data-hotkey="Control+," @click="onOpenAppSettings">
             <Icon :icon="IconType.SETTINGS" />
             <span>{{ t.appSettings }}</span>
           </button>
@@ -182,7 +182,7 @@
           >
             <Icon :icon="IconType.DELETE" />
             <span>{{ t.deleteMove }}</span>
-          </button>
+          </button> -->
         </div>
       </template>
     </BoardView>

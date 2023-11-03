@@ -37,8 +37,8 @@
         </div>
       </div>
     </div>
-    <div class="auto row branch-list-area">
-      <!-- NOTE: 背景だけを透過させるために背景専用の要素を作る。 -->
+    <div class="auto row branch-list-area" style="display: none">
+      <!-- HACK: div自体をコメントアウトすると将棋盤が操作できるなるので、display: noneにしている -->
       <div class="move-list-background" :style="{ opacity }"></div>
       <div ref="branchList" class="auto branch-list">
         <div
@@ -65,20 +65,20 @@
       </div>
     </div>
     <div class="row wrap options">
-      <div class="option">
+      <!-- <div class="option">
         <ToggleButton
           :label="elapsedTimeToggleLabel"
           :value="showElapsedTime"
           @change="(enabled: boolean) => emit('toggleShowElapsedTime', enabled)"
         />
-      </div>
-      <div class="option">
+      </div> -->
+      <!-- <div class="option">
         <ToggleButton
           :label="commentToggleLabel"
           :value="showComment"
           @change="(enabled: boolean) => emit('toggleShowComment', enabled)"
         />
-      </div>
+      </div> -->
     </div>
   </div>
 </template>

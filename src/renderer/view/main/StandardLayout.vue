@@ -17,17 +17,17 @@
             />
             <RecordPane :style="recordPaneStyle" />
           </div>
-          <button
+          <!-- <button
             v-if="!isBottomPaneVisible"
             class="unhide-tabview-button"
             @click="onUnhideTabView"
           >
             <Icon :icon="IconType.ARROW_UP" />
             <span>{{ t.expandTabView }}</span>
-          </button>
+          </button> -->
         </div>
       </Pane>
-      <Pane :size="bottomPaneHeightPercentage">
+      <!-- <Pane :size="bottomPaneHeightPercentage">
         <TabPane
           v-if="appSetting.tabPaneType === TabPaneType.SINGLE"
           class="full"
@@ -74,7 +74,7 @@
             />
           </Pane>
         </Splitpanes>
-      </Pane>
+      </Pane> -->
     </Splitpanes>
   </div>
 </template>
