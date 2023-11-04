@@ -907,8 +907,15 @@ class Store {
   getRecordKIFUrl(): string {
     const encodedKifData = encodeURIComponent(this.recordManager.record.sfen);
     const currentUrl = new URL(window.location.href);
+    currentUrl.searchParams.forEach((value: string, key: string) => {
+      currentUrl.searchParams.delete(key);
+    });
+
+    const appSetting = useAppSetting();
+    currentUrl.searchParams.append("flip", appSetting.getFlipBoard().toString());
     currentUrl.searchParams.append("sfen", encodedKifData);
     const kifUrl = currentUrl.toString();
+
     return kifUrl;
   }
   copyRecordKIFUrl(): void {

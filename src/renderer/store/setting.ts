@@ -236,8 +236,16 @@ class AppSettingStore {
   }
 
   flipBoard(): void {
-    this.setting.boardFlipping = !this.setting.boardFlipping;
+    this.setFlipBoard(!this.setting.boardFlipping);
+  }
+
+  setFlipBoard(flip: boolean): void {
+    this.setting.boardFlipping = flip;
     api.saveAppSetting(this.setting);
+  }
+
+  getFlipBoard(): boolean {
+    return this.setting.boardFlipping;
   }
 }
 

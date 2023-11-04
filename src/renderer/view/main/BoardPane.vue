@@ -221,6 +221,7 @@ import {
   getPieceImageBaseURL,
 } from "@/common/settings/app";
 import { getBlackPlayerName, getWhitePlayerName } from "@/common/helpers/metadata";
+import { initFlip } from "@/renderer/store/init";
 
 defineProps({
   maxSize: {
@@ -244,6 +245,7 @@ const isInitialPositionMenuVisible = ref(false);
 onMounted(() => {
   installHotKeyForMainWindow(rightControl.value);
   installHotKeyForMainWindow(leftControl.value);
+  initFlip();
 });
 
 onUpdated(() => {
@@ -427,3 +429,4 @@ const controlStates = computed(() => {
   height: 68%;
 }
 </style>
+@/renderer/store/init
