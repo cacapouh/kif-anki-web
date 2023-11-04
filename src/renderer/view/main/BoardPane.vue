@@ -166,10 +166,10 @@
             <Icon :icon="IconType.ENGINE_SETTINGS" />
             <span>{{ t.engineSettings }}</span>
           </button> -->
-          <!-- <button class="control-item" data-hotkey="Control+t" @click="onFlip">
+          <button class="control-item" data-hotkey="Control+t" @click="onFlip">
             <Icon :icon="IconType.FLIP" />
             <span>{{ t.flipBoard }}</span>
-          </button> -->
+          </button>
           <button class="control-item" @click="onFileAction">
             <Icon :icon="IconType.FILE" />
             <span>{{ t.file }}</span>
