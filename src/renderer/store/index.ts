@@ -619,6 +619,7 @@ class Store {
     if (this.appState !== AppState.NORMAL && this.appState !== AppState.RESEARCH) {
       return;
     }
+    // TODO: 正解かどうか判定してmoveする
     if (!this.recordManager.appendMove({ move })) {
       return;
     }
