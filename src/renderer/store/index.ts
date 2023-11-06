@@ -619,10 +619,23 @@ class Store {
     if (this.appState !== AppState.NORMAL && this.appState !== AppState.RESEARCH) {
       return;
     }
-    // TODO: 正解かどうか判定してmoveする
     if (!this.recordManager.appendMove({ move })) {
       return;
     }
+
+    // 正解かどうか判定してmoveする
+    const searchParams = new URLSearchParams(window.location.search);
+    const encodedUsiData = searchParams.get("usi");
+    if (encodedUsiData) {
+      const usiData = decodeURIComponent(encodedUsiData);
+
+      // クエリパラメータのUSIデータと指し手があっているかどうか, HACK:指し手の判定が不用意にUSI形式に依存している
+      const isMatched = usiData.startsWith(this.recordManager.record.usi);
+      if (!isMatched) {
+        this.recordManager.removeCurrentMove();
+      }
+    }
+
     const appSetting = useAppSetting();
     playPieceBeat(appSetting.pieceVolume);
   }
@@ -906,7 +919,7 @@ class Store {
   }
 
   getRecordKIFUrl(): string {
-    const encodedKifData = encodeURIComponent(this.recordManager.record.sfen);
+    const encodedKifData = encodeURIComponent(this.recordManager.record.usi);
     const currentUrl = new URL(window.location.href);
     currentUrl.searchParams.forEach((value: string, key: string) => {
       currentUrl.searchParams.delete(key);
@@ -914,7 +927,7 @@ class Store {
 
     const appSetting = useAppSetting();
     currentUrl.searchParams.append("flip", appSetting.getFlipBoard().toString());
-    currentUrl.searchParams.append("sfen", encodedKifData);
+    currentUrl.searchParams.append("usi", encodedKifData);
     const kifUrl = currentUrl.toString();
 
     return kifUrl;
