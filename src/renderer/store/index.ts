@@ -616,6 +616,21 @@ class Store {
     });
   }
 
+  private doMoveNext(usiData: string, index: number): MoveResult | undefined {
+    const recordManager = new RecordManager();
+    recordManager.importRecord(usiData);
+    const moves = recordManager.record.moves;
+
+    if (index < moves.length) {
+      const move = moves[index].move;
+      if (move instanceof Move) {
+        this.recordManager.appendMove({ move });
+      }
+    } else {
+      return MoveResult.Finish; // HACK: MoveResultを扱う処理を別の場所にしたい...
+    }
+  }
+
   doMove(move: Move): MoveResult | undefined {
     if (this.appState !== AppState.NORMAL && this.appState !== AppState.RESEARCH) {
       return;
@@ -635,6 +650,9 @@ class Store {
       if (isMatched) {
         const appSetting = useAppSetting();
         playPieceBeat(appSetting.pieceVolume);
+        if (this.doMoveNext(usiData, this.recordManager.record.length + 1) === MoveResult.Finish) {
+          return MoveResult.Finish;
+        }
         return MoveResult.Correct;
       } else {
         this.recordManager.removeCurrentMove();

@@ -279,6 +279,8 @@ const onMove = (move: Move) => {
       message = "⭕️ 正解";
     } else if (moveResult === MoveResult.InCorrect) {
       message = "❌ 不正解";
+    } else if (moveResult === MoveResult.Finish) {
+      message = "⭕️ 終了";
     }
   }
 };

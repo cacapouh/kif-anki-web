@@ -5,6 +5,7 @@ import { Square } from "./square";
 export enum MoveResult {
   Correct,
   InCorrect,
+  Finish,
 }
 
 export class Move {
