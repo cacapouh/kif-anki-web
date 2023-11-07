@@ -627,6 +627,9 @@ class Store {
       if (move instanceof Move) {
         this.recordManager.appendMove({ move });
       }
+      if (index + 1 == moves.length) {
+        return MoveResult.Finish; // HACK: MoveResultを扱う処理を別の場所にしたい...
+      }
     } else {
       return MoveResult.Finish; // HACK: MoveResultを扱う処理を別の場所にしたい...
     }
