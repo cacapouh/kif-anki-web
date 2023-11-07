@@ -14,6 +14,7 @@ import {
   SpecialMoveType,
   exportKI2,
   RecordFormatType,
+  MoveResult,
 } from "@/common/shogi";
 import { reactive, UnwrapNestedRefs } from "vue";
 import { GameSetting } from "@/common/settings/game";
@@ -615,7 +616,7 @@ class Store {
     });
   }
 
-  doMove(move: Move): void {
+  doMove(move: Move): MoveResult | undefined {
     if (this.appState !== AppState.NORMAL && this.appState !== AppState.RESEARCH) {
       return;
     }
@@ -631,13 +632,15 @@ class Store {
 
       // クエリパラメータのUSIデータと指し手があっているかどうか, HACK:指し手の判定が不用意にUSI形式に依存している
       const isMatched = usiData.startsWith(this.recordManager.record.usi);
-      if (!isMatched) {
+      if (isMatched) {
+        const appSetting = useAppSetting();
+        playPieceBeat(appSetting.pieceVolume);
+        return MoveResult.Correct;
+      } else {
         this.recordManager.removeCurrentMove();
+        return MoveResult.InCorrect;
       }
     }
-
-    const appSetting = useAppSetting();
-    playPieceBeat(appSetting.pieceVolume);
   }
 
   onFinish(): void {

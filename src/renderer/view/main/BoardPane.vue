@@ -174,6 +174,7 @@
             <Icon :icon="IconType.FILE" />
             <span>{{ t.file }}</span>
           </button>
+          <span>{{ message }}</span>
           <!-- <button
             class="control-item"
             data-hotkey="Control+d"
@@ -222,6 +223,7 @@ import {
 } from "@/common/settings/app";
 import { getBlackPlayerName, getWhitePlayerName } from "@/common/helpers/metadata";
 import { initFlip } from "@/renderer/store/init";
+import { MoveResult } from "@/common/shogi";
 
 defineProps({
   maxSize: {
@@ -241,6 +243,7 @@ const leftControl = ref();
 const isGameMenuVisible = ref(false);
 const isFileMenuVisible = ref(false);
 const isInitialPositionMenuVisible = ref(false);
+let message = "";
 
 onMounted(() => {
   installHotKeyForMainWindow(rightControl.value);
@@ -271,7 +274,12 @@ const onMove = (move: Move) => {
   if (store.appState === AppState.GAME || store.appState === AppState.CSA_GAME) {
     humanPlayer.doMove(move);
   } else {
-    store.doMove(move);
+    const moveResult = store.doMove(move);
+    if (moveResult === MoveResult.Correct) {
+      message = "⭕️ 正解";
+    } else if (moveResult === MoveResult.InCorrect) {
+      message = "❌ 不正解";
+    }
   }
 };
 

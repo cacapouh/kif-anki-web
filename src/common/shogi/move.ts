@@ -2,6 +2,11 @@ import { Color } from "./color";
 import { Piece, PieceType, pieceTypeToSFEN } from "./piece";
 import { Square } from "./square";
 
+export enum MoveResult {
+  Correct,
+  InCorrect,
+}
+
 export class Move {
   constructor(
     public from: Square | PieceType,
