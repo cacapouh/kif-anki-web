@@ -39,8 +39,12 @@
       <div class="url-background">
         &nbsp;棋譜暗記用URL:
         <a :href="`${url}`">{{ truncate(url) }}</a>
-        <br/>
-        <button style="padding:10px;width: 100%;" @click="copyRecordKIFUrl">URLをコピー</button>
+        <br />
+        <button style="padding:10px;width: 100%;" @click="copyRecordKIFUrl">棋譜暗記用URLをコピー</button>
+        <br />
+        <button style="padding:10px;width: 100%;" @click="shareOnTwitter">X(旧:Twitter)で共有</button>
+        <br />
+        <button style="padding:10px;width: 100%;" @click="redirectToNewKifPage">新規寄付作成</button>
       </div>
     </div>
     <div class="auto row branch-list-area" style="display: none">
@@ -201,6 +205,13 @@ const truncate = (str: string) => {
 };
 const copyRecordKIFUrl = () => {
   store.copyRecordKIFUrl();
+};
+
+const shareOnTwitter = () => {
+  window.open(`http://twitter.com/share?url=${url.value}&hashtags=棋譜暗記Web`);
+};
+const redirectToNewKifPage = () => {
+  window.open(location.origin + location.pathname);
 };
 
 const branches = computed(() => {
