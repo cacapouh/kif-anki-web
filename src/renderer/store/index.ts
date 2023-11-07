@@ -49,6 +49,7 @@ import { MateSearchManager } from "./mate";
 import { exportJKFString } from "@/common/shogi/jkf";
 import { detectUnsupportedRecordProperties } from "../helpers/record";
 import { RecordFileFormat, detectRecordFileFormatByPath } from "@/common/file";
+import { encode, decode } from "@/renderer/store/codec";
 
 export type PVPreview = {
   position: ImmutablePosition;
@@ -649,7 +650,7 @@ class Store {
     const searchParams = new URLSearchParams(window.location.search);
     const encodedUsiData = searchParams.get("usi");
     if (encodedUsiData) {
-      const usiData = decodeURIComponent(encodedUsiData);
+      const usiData = decode(encodedUsiData);
 
       // クエリパラメータのUSIデータと指し手があっているかどうか, HACK:指し手の判定が不用意にUSI形式に依存している
       const isMatched = usiData.startsWith(this.recordManager.record.usi);
@@ -946,7 +947,7 @@ class Store {
   }
 
   getRecordKIFUrl(): string {
-    const encodedKifData = encodeURIComponent(this.recordManager.record.usi);
+    const encodedKifData = encode(this.recordManager.record.usi);
     const currentUrl = new URL(window.location.href);
     currentUrl.searchParams.forEach((value: string, key: string) => {
       currentUrl.searchParams.delete(key);
