@@ -1,8 +1,0 @@
-docs/webapp*
-docs/third-party-licenses*
-dist
-dist_electron
-coverage
-.github/*TEMPLATE*
-.gitignore
-LICENSE.md
