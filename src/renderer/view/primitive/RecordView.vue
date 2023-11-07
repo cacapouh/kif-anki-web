@@ -37,7 +37,7 @@
         </div>
       </div>
       <div class="url-background">
-        &nbsp;棋譜URL:
+        &nbsp;棋譜暗記用URL:
         <a :href="`${url}`">{{ truncate(url) }}</a>
         <br/>
         <button style="padding:10px;width: 100%;" @click="copyRecordKIFUrl">URLをコピー</button>
