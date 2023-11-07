@@ -1,6 +1,5 @@
 <template>
   <div ref="root" class="full column record-pane">
-    <div style="color: white;background-color: #272727; border-radius: 5px; margin-bottom: 1px;"><span>{{ modeText }}</span></div>
     <div class="auto record">
       <RecordView
         :record="store.record"
@@ -51,14 +50,6 @@ onMounted(() => {
 
 onUnmounted(() => {
   uninstallHotKeyForMainWindow(root.value);
-});
-
-const modeText = computed(() => {
-  if (store.isCreateMode()) {
-    return "棋譜作成モード";
-  } else {
-    return "棋譜暗記モード";
-  }
 });
 
 const goto = (ply: number) => {

@@ -116,6 +116,7 @@ const updateSize = () => {
 };
 
 onMounted(() => {
+  onMinimizeTab();
   window.addEventListener("resize", updateSize);
 });
 

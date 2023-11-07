@@ -1,5 +1,6 @@
 <template>
   <div class="full column record-view">
+    <div style="color: white;background-color: #272727; border-radius: 5px; margin-bottom: 1px;"><span>{{ modeText }}</span></div>
     <div class="row control">
       <button :disabled="!operational" data-hotkey="ArrowLeft" @click="goBegin">
         <Icon :icon="IconType.FIRST" />
@@ -149,6 +150,14 @@ const emit = defineEmits<{
 
 const moveList = ref(null as HTMLDivElement | null);
 const branchList = ref();
+
+const modeText = computed(() => {
+  if (store.isCreateMode()) {
+    return "棋譜作成モード";
+  } else {
+    return "棋譜暗記モード";
+  }
+});
 
 const goBegin = () => {
   if (props.operational) {

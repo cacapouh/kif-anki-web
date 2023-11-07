@@ -58,7 +58,7 @@ export const headerHeight = 30;
 </script>
 
 <script setup lang="ts">
-import { PropType, computed } from "vue";
+import { PropType, computed, onMounted } from "vue";
 import RecordComment from "@/renderer/view/tab/RecordComment.vue";
 import EngineAnalytics from "@/renderer/view/tab/EngineAnalytics.vue";
 import EvaluationChart, { EvaluationChartType } from "@/renderer/view/tab/EvaluationChart.vue";
@@ -96,6 +96,8 @@ const emit = defineEmits<{
 const changeSelect = (tab: Tab) => emit("onChangeTab", tab);
 const minimize = () => emit("onMinimize");
 const contentSize = computed(() => props.size.reduce(new RectSize(0, headerHeight)));
+
+onMounted(minimize);
 
 const tabs = {
   [Tab.RECORD_INFO]: {
