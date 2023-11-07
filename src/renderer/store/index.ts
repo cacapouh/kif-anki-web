@@ -635,7 +635,7 @@ class Store {
   // 棋譜作成モードか棋譜暗記モードか...
   isCreateMode(): boolean {
     const searchParams = new URLSearchParams(window.location.search);
-    return searchParams.get("usi") === undefined; // HACK: usiパラメータでモードを判定しないようにしたい
+    return searchParams.get("usi") == undefined; // HACK: usiパラメータでモードを判定しないようにしたい
   }
 
   doMove(move: Move): MoveResult | undefined {
