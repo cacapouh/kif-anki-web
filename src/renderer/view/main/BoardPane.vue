@@ -174,8 +174,7 @@
             <Icon :icon="IconType.FILE" />
             <span>{{ t.file }}</span>
           </button>
-          <span>{{ message }}</span>
-          <!-- <button
+          <button
             class="control-item"
             data-hotkey="Control+d"
             :disabled="!controlStates.removeCurrentMove"
@@ -183,7 +182,8 @@
           >
             <Icon :icon="IconType.DELETE" />
             <span>{{ t.deleteMove }}</span>
-          </button> -->
+          </button>
+          <span>{{ message }}</span>
         </div>
       </template>
     </BoardView>
