@@ -660,7 +660,7 @@ class Store {
       const ki2 = exportKI2(this.recordManager.record, {
         returnCode: appSetting.returnCode,
       });
-      const isMatched = data.startsWith(ki2);
+      const isMatched = data.includes(ki2); // HACK: 指し手があっているかどうかの判定が雑
       if (isMatched) {
         playPieceBeat(appSetting.pieceVolume);
         if (this.doMoveNext(data, this.recordManager.record.length + 1) === MoveResult.Finish) {
