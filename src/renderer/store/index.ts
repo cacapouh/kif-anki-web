@@ -638,7 +638,7 @@ class Store {
   // 棋譜作成モードか棋譜暗記モードか...
   isCreateMode(): boolean {
     const searchParams = new URLSearchParams(window.location.search);
-    return searchParams.get("usi") == undefined; // HACK: usiパラメータでモードを判定しないようにしたい
+    return searchParams.get("data") == undefined; // HACK: usiパラメータでモードを判定しないようにしたい
   }
 
   doMove(move: Move): MoveResult | undefined {
@@ -651,16 +651,19 @@ class Store {
 
     // 正解かどうか判定してmoveする
     const searchParams = new URLSearchParams(window.location.search);
-    const encodedUsiData = searchParams.get("usi");
-    if (encodedUsiData) {
-      const usiData = decode(encodedUsiData);
+    const encodedData = searchParams.get("data");
+    if (encodedData) {
+      const data = decode(encodedData);
 
-      // クエリパラメータのUSIデータと指し手があっているかどうか, HACK:指し手の判定が不用意にUSI形式に依存している
-      const isMatched = usiData.startsWith(this.recordManager.record.usi);
+      const appSetting = useAppSetting();
+      // クエリパラメータのUSIデータと指し手があっているかどうか, HACK:指し手の判定が不用意にKI2形式に依存している
+      const ki2 = exportKI2(this.recordManager.record, {
+        returnCode: appSetting.returnCode,
+      });
+      const isMatched = data.startsWith(ki2);
       if (isMatched) {
-        const appSetting = useAppSetting();
         playPieceBeat(appSetting.pieceVolume);
-        if (this.doMoveNext(usiData, this.recordManager.record.length + 1) === MoveResult.Finish) {
+        if (this.doMoveNext(data, this.recordManager.record.length + 1) === MoveResult.Finish) {
           return MoveResult.Finish;
         }
         return MoveResult.Correct;
@@ -950,15 +953,19 @@ class Store {
   }
 
   getRecordKIFUrl(): string {
-    const encodedKifData = encode(this.recordManager.record.usi);
+    const appSetting = useAppSetting();
+    const ki2 = exportKI2(this.recordManager.record, {
+      returnCode: appSetting.returnCode,
+    });
+
+    const encodedKifData = encode(ki2);
     const currentUrl = new URL(window.location.href);
     currentUrl.searchParams.forEach((value: string, key: string) => {
       currentUrl.searchParams.delete(key);
     });
 
-    const appSetting = useAppSetting();
     currentUrl.searchParams.append("flip", appSetting.getFlipBoard().toString());
-    currentUrl.searchParams.append("usi", encodedKifData);
+    currentUrl.searchParams.append("data", encodedKifData);
     const kifUrl = currentUrl.toString();
 
     return kifUrl;
