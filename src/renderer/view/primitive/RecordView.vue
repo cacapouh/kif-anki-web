@@ -207,7 +207,11 @@ const swapWithNextBranch = () => {
   }
 };
 const url = computed(() => {
-  return store.getRecordKIFUrl();
+  if (store.isCreateMode()) {
+    return store.getRecordKIFUrl();
+  } else {
+    return window.location.href;
+  }
 });
 const truncate = (str: string) => {
   return str.substring(0, 52) + "...";

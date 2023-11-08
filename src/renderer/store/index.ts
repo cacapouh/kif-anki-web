@@ -959,7 +959,7 @@ class Store {
     });
 
     const encodedKifData = encode(ki2);
-    const currentUrl = new URL(window.location.href);
+    const currentUrl = new URL(location.origin + location.pathname);
     currentUrl.searchParams.forEach((value: string, key: string) => {
       currentUrl.searchParams.delete(key);
     });
