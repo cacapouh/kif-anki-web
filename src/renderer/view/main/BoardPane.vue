@@ -249,6 +249,7 @@ onMounted(() => {
   installHotKeyForMainWindow(rightControl.value);
   installHotKeyForMainWindow(leftControl.value);
   initFlip();
+  store.doFirstMoveWhenFlip();
 });
 
 onUpdated(() => {

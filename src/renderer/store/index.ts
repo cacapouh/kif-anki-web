@@ -617,11 +617,10 @@ class Store {
     });
   }
 
-  private doMoveNext(usiData: string, index: number): MoveResult | undefined {
+  private doMoveNext(kifData: string, index: number): MoveResult | undefined {
     const recordManager = new RecordManager();
-    recordManager.importRecord(usiData);
+    recordManager.importRecord(kifData);
     const moves = recordManager.record.moves;
-
     if (index < moves.length) {
       const move = moves[index].move;
       if (move instanceof Move) {
@@ -950,6 +949,20 @@ class Store {
       return this.recordManager.jumpToBookmark(bookmark);
     }
     return false;
+  }
+
+  doFirstMoveWhenFlip(): void {
+    if (this.recordManager.record.length == 0) {
+      const currentUrl = new URL(location.href);
+      const data = currentUrl.searchParams.get("data");
+      if (data && currentUrl.searchParams.get("flip") == "true") {
+        const recordManager = new RecordManager();
+        recordManager.importRecord(decode(data));
+
+        const move = recordManager.record.moves[1];
+        this.recordManager.appendMove(move);
+      }
+    }
   }
 
   getRecordKIFUrl(): string {
