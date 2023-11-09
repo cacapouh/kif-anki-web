@@ -617,16 +617,44 @@ class Store {
     });
   }
 
-  private doMoveNext(kifData: string, index: number): MoveResult | undefined {
-    const recordManager = new RecordManager();
-    recordManager.importRecord(kifData);
-    const moves = recordManager.record.moves;
-    if (index < moves.length) {
-      const move = moves[index].move;
+  private kifDataInQueryParam(): RecordManager | null {
+    const searchParams = new URLSearchParams(window.location.search);
+    const kifData = searchParams.get("data");
+    if (kifData) {
+      const recordManager = new RecordManager();
+      recordManager.importRecord(decode(kifData));
+      return recordManager;
+    } else {
+      return null;
+    }
+  }
+
+  nextMove(): Move | null {
+    const length = this.recordManager.record.length;
+    const moves = this.kifDataInQueryParam()?.record.moves;
+
+    if (moves && length + 1 < moves.length) {
+      const move = moves[length + 1].move;
       if (move instanceof Move) {
-        this.recordManager.appendMove({ move });
+        return move;
+      } else {
+        return null;
       }
-      if (index + 1 == moves.length) {
+    } else {
+      return null;
+    }
+  }
+
+  doNextMove(): MoveResult | undefined {
+    const kifData = this.kifDataInQueryParam();
+
+    const length = this.recordManager.record.length;
+    if (kifData && length + 1 < kifData.record.moves.length) {
+      const nextMove = kifData.record.moves[length + 1].move;
+      if (nextMove instanceof Move) {
+        this.recordManager.appendMove({ move: nextMove });
+      }
+      if (kifData.record.moves.length <= this.recordManager.record.length + 1) {
         return MoveResult.Finish; // HACK: MoveResultを扱う処理を別の場所にしたい...
       }
     } else {
@@ -649,20 +677,20 @@ class Store {
     }
 
     // 正解かどうか判定してmoveする
-    const searchParams = new URLSearchParams(window.location.search);
-    const encodedData = searchParams.get("data");
-    if (encodedData) {
-      const data = decode(encodedData);
-
+    const data = this.kifDataInQueryParam();
+    if (data) {
       const appSetting = useAppSetting();
       // クエリパラメータのUSIデータと指し手があっているかどうか, HACK:指し手の判定が不用意にKI2形式に依存している
-      const ki2 = exportKI2(this.recordManager.record, {
+      const thisKifData = exportKI2(this.recordManager.record, {
         returnCode: appSetting.returnCode,
       });
-      const isMatched = data.includes(ki2); // HACK: 指し手があっているかどうかの判定が雑
+      const kifDataInQueryParam = exportKI2(data.record, {
+        returnCode: appSetting.returnCode,
+      })
+      const isMatched = kifDataInQueryParam.includes(thisKifData); // HACK: 指し手があっているかどうかの判定が雑
       if (isMatched) {
         playPieceBeat(appSetting.pieceVolume);
-        if (this.doMoveNext(data, this.recordManager.record.length + 1) === MoveResult.Finish) {
+        if (this.doNextMove() === MoveResult.Finish) {
           return MoveResult.Finish;
         }
         return MoveResult.Correct;

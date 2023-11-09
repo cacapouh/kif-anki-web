@@ -183,6 +183,10 @@
             <Icon :icon="IconType.DELETE" />
             <span>{{ t.deleteMove }}</span>
           </button>
+          <button v-if="!isCreateMode" @click="onNextMove" class="control-item">
+            <Icon :icon="IconType.QUESTION" />
+            次の指し手
+          </button>
           <span>{{ message }}</span>
         </div>
       </template>
@@ -267,8 +271,17 @@ onBeforeUnmount(() => {
   uninstallHotKeyForMainWindow(leftControl.value);
 });
 
+const isCreateMode = store.isCreateMode();
+
 const onResize = (size: RectSize) => {
   emit("resize", size);
+};
+
+const onNextMove = () => {
+  const move = store.nextMove();
+  if (move) {
+    onMove(move);
+  }
 };
 
 const onMove = (move: Move) => {
