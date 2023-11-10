@@ -43,8 +43,6 @@
         <br />
         <button style="padding:10px;width: 100%;" @click="copyRecordKIFUrl">棋譜暗記用URLをコピー</button>
         <br />
-        <button style="padding:10px;width: 100%;" @click="shareOnTwitter">X(旧:Twitter)で共有</button>
-        <br />
         <button style="padding:10px;width: 100%;" @click="redirectToNewKifPage">新規棋譜作成</button>
       </div>
     </div>
@@ -218,10 +216,6 @@ const truncate = (str: string) => {
 };
 const copyRecordKIFUrl = () => {
   store.copyRecordKIFUrl();
-};
-
-const shareOnTwitter = () => {
-  window.open(`http://twitter.com/share?url=${url.value}&hashtags=棋譜暗記Web`);
 };
 const redirectToNewKifPage = () => {
   window.open(location.origin + location.pathname);
