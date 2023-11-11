@@ -153,19 +153,6 @@
             hidden: appSetting.leftSideControlType === LeftSideControlType.NONE,
           }"
         >
-          <!-- <button class="control-item" data-hotkey="Control+," @click="onOpenAppSettings">
-            <Icon :icon="IconType.SETTINGS" />
-            <span>{{ t.appSettings }}</span>
-          </button> -->
-          <!-- <button
-            class="control-item"
-            data-hotkey="Control+."
-            :disabled="!controlStates.engineSettings"
-            @click="onOpenEngineSettings"
-          >
-            <Icon :icon="IconType.ENGINE_SETTINGS" />
-            <span>{{ t.engineSettings }}</span>
-          </button> -->
           <button class="control-item" data-hotkey="Control+t" @click="onFlip">
             <Icon :icon="IconType.FLIP" />
             <span>{{ t.flipBoard }}</span>

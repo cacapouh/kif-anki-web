@@ -15,7 +15,7 @@
               :max-size="boardPaneMaxSize"
               @resize="onBoardPaneResize"
             />
-            <RecordPane v-show="recordPaneVisiable" :style="recordPaneStyle" />
+            <RecordPane v-show="isSmartphoneLayout" :style="recordPaneStyle" />
           </div>
         </div>
       </Pane>
@@ -38,7 +38,7 @@ import { Lazy } from "@/renderer/helpers/lazy";
 import { Splitpanes, Pane } from "splitpanes";
 import "splitpanes/dist/splitpanes.css";
 import { useAppSetting } from "@/renderer/store/setting";
-import { isNarrowDisplay } from "@/renderer/device/device";
+import { isNarrowDisplay, forceLandscapeModeIfPossible } from "@/renderer/device/device";
 
 const splitterWidth = 8;
 const margin = 10;
@@ -47,7 +47,6 @@ const lazyUpdateDelay = 100;
 const appSetting = useAppSetting();
 const windowSize = reactive(new RectSize(window.innerWidth, window.innerHeight));
 const topPaneHeightPercentage = ref(appSetting.topPaneHeightPercentage);
-const bottomLeftPaneWidthPercentage = ref(appSetting.bottomLeftPaneWidthPercentage);
 const boardPaneSize = reactive(new RectSize(0, 0));
 
 const windowLazyUpdate = new Lazy();
@@ -61,6 +60,10 @@ const updateSize = () => {
 onMounted(() => {
   onMinimizeTab();
   window.addEventListener("resize", updateSize);
+
+  if (isNarrowDisplay()) {
+    forceLandscapeModeIfPossible();
+  }
 });
 
 onUnmounted(() => {
@@ -101,7 +104,7 @@ const isBottomPaneVisible = computed(() => {
   return (windowSize.height * bottomPaneHeightPercentage.value) / 100 >= tabHeaderHeight;
 });
 
-const recordPaneVisiable = computed(() => {
+const isSmartphoneLayout = computed(() => {
   return !isNarrowDisplay();
 });
 
@@ -159,6 +162,9 @@ const bottomPaneHeightPercentage = computed(() => {
 }
 .bottom-frame.splitpanes--vertical > .splitpanes__pane {
   box-shadow: 6px 0px 6px -3px var(--shadow-color);
+}
+.footer {
+  background-color: var(--main-bg-color);
 }
 </style>
 
