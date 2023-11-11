@@ -38,7 +38,7 @@ import { Lazy } from "@/renderer/helpers/lazy";
 import { Splitpanes, Pane } from "splitpanes";
 import "splitpanes/dist/splitpanes.css";
 import { useAppSetting } from "@/renderer/store/setting";
-import { isNarrowDisplay, forceLandscapeModeIfPossible } from "@/renderer/device/device";
+import { isNarrowDisplay } from "@/renderer/device/device";
 
 const splitterWidth = 8;
 const margin = 10;
@@ -60,10 +60,6 @@ const updateSize = () => {
 onMounted(() => {
   onMinimizeTab();
   window.addEventListener("resize", updateSize);
-
-  if (isNarrowDisplay()) {
-    forceLandscapeModeIfPossible();
-  }
 });
 
 onUnmounted(() => {
