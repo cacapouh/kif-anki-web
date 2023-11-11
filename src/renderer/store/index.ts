@@ -668,6 +668,24 @@ class Store {
     return searchParams.get("data") == undefined; // HACK: usiパラメータでモードを判定しないようにしたい
   }
 
+  // 指し手があっているかどうかを判定する, HACK: 雑な判定処理なのでなんとかする, 不用意ににUSI形式に依存した処理になっている
+  isCorrectMove(usiInQueryParam: string): boolean {
+    const thisUsiData = this.getRecordUSIAll(this.recordManager);
+
+    if (usiInQueryParam.endsWith("+")) {
+      return usiInQueryParam.includes(thisUsiData);
+    } else {
+      console.log(`thisUsiData: ${thisUsiData}`);
+      console.log(`usiInQueryParam: ${usiInQueryParam}`);
+      // HACK: 不成を指したが本当は成る必要があった場合
+      if (usiInQueryParam.includes(thisUsiData + "+")) {
+        return false;
+      }
+
+      return usiInQueryParam.includes(thisUsiData);
+    }
+  }
+
   doMove(move: Move): MoveResult | undefined {
     if (this.appState !== AppState.NORMAL && this.appState !== AppState.RESEARCH) {
       return;
@@ -680,15 +698,7 @@ class Store {
     const data = this.kifDataInQueryParam();
     if (data) {
       const appSetting = useAppSetting();
-      // クエリパラメータのUSIデータと指し手があっているかどうか, HACK:指し手の判定が不用意にKI2形式に依存している
-      const thisKifData = exportKI2(this.recordManager.record, {
-        returnCode: appSetting.returnCode,
-      });
-      const kifDataInQueryParam = exportKI2(data.record, {
-        returnCode: appSetting.returnCode,
-      })
-      const isMatched = kifDataInQueryParam.includes(thisKifData); // HACK: 指し手があっているかどうかの判定が雑
-      if (isMatched) {
+      if (this.isCorrectMove(this.getRecordUSIAll(data))) {
         playPieceBeat(appSetting.pieceVolume);
         if (this.doNextMove() === MoveResult.Finish) {
           return MoveResult.Finish;
@@ -1048,13 +1058,17 @@ class Store {
     navigator.clipboard.writeText(str);
   }
 
-  copyRecordUSIAll(): void {
+  getRecordUSIAll(recordManager: RecordManager): string {
     const appSetting = useAppSetting();
-    const str = this.recordManager.record.getUSI({
+    return recordManager.record.getUSI({
       startpos: appSetting.enableUSIFileStartpos,
       resign: appSetting.enableUSIFileResign,
       allMoves: true,
     });
+  }
+
+  copyRecordUSIAll(): void {
+    const str = this.getRecordUSIAll(this.recordManager);
     navigator.clipboard.writeText(str);
   }
 
