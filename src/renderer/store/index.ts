@@ -1005,11 +1005,7 @@ class Store {
 
   getRecordKIFUrl(): string {
     const appSetting = useAppSetting();
-    const ki2 = exportKI2(this.recordManager.record, {
-      returnCode: appSetting.returnCode,
-    });
-
-    const encodedKifData = encode(ki2);
+    const encodedKifData = encode(this.getRecordUSIAll(this.recordManager));
     const currentUrl = new URL(location.origin + location.pathname);
     currentUrl.searchParams.forEach((value: string, key: string) => {
       currentUrl.searchParams.delete(key);
