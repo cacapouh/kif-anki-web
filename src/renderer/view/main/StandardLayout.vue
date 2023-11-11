@@ -15,7 +15,7 @@
               :max-size="boardPaneMaxSize"
               @resize="onBoardPaneResize"
             />
-            <RecordPane v-show="!isNarrowDisplay" :style="recordPaneStyle" />
+            <RecordPane v-show="recordPaneVisiable" :style="recordPaneStyle" />
           </div>
         </div>
       </Pane>
@@ -28,7 +28,7 @@ import { t } from "@/common/i18n";
 import { reactive, onMounted, onUnmounted, computed, ref } from "vue";
 import BoardPane from "./BoardPane.vue";
 import RecordPane, { minWidth as minRecordWidth } from "./RecordPane.vue";
-import TabPane, { headerHeight as tabHeaderHeight } from "./TabPane.vue";
+import { headerHeight as tabHeaderHeight } from "./TabPane.vue";
 import { RectSize } from "@/common/graphics";
 import { AppSettingUpdate, Tab, TabPaneType } from "@/common/settings/app";
 import api from "@/renderer/ipc/api";
@@ -37,9 +37,8 @@ import { toString } from "@/common/helpers/string";
 import { Lazy } from "@/renderer/helpers/lazy";
 import { Splitpanes, Pane } from "splitpanes";
 import "splitpanes/dist/splitpanes.css";
-import { IconType } from "@/renderer/assets/icons";
-import Icon from "@/renderer/view/primitive/Icon.vue";
 import { useAppSetting } from "@/renderer/store/setting";
+import { isNarrowDisplay } from "@/renderer/device/device";
 
 const splitterWidth = 8;
 const margin = 10;
@@ -79,25 +78,9 @@ const updateAppSetting = (update: AppSettingUpdate) => {
   });
 };
 
-const onChangeTab = (tab: Tab) => {
-  updateAppSetting({ tab });
-};
-const onChangeTab2 = (tab2: Tab) => {
-  updateAppSetting({ tab2 });
-};
-
 const onMinimizeTab = () => {
   topPaneHeightPercentage.value = 100;
   updateAppSetting({ topPaneHeightPercentage: 100 });
-};
-
-const onUnhideTabView = () => {
-  const newValue = Math.min(
-    appSetting.topPanePreviousHeightPercentage,
-    ((windowSize.height - tabHeaderHeight * 2 - splitterWidth) / windowSize.height) * 100,
-  );
-  topPaneHeightPercentage.value = newValue;
-  updateAppSetting({ topPaneHeightPercentage: newValue });
 };
 
 const mainLazyUpdate = new Lazy();
@@ -114,30 +97,16 @@ const onResizedMain = (panes: { size: number }[]) => {
   updateAppSetting({ topPaneHeightPercentage: newValue });
 };
 
-const bottomLazyUpdate = new Lazy();
-const onResizeBottom = (panes: { size: number }[]) => {
-  const newValue = panes[0].size;
-  bottomLazyUpdate.after(() => {
-    bottomLeftPaneWidthPercentage.value = newValue;
-  }, lazyUpdateDelay);
-};
-const onResizedBottom = (panes: { size: number }[]) => {
-  bottomLazyUpdate.clear();
-  const newValue = panes[0].size;
-  bottomLeftPaneWidthPercentage.value = newValue;
-  updateAppSetting({ bottomLeftPaneWidthPercentage: newValue });
-};
-
-const isNarrowDisplay = computed(() => {
-  return windowSize.width < 600;
-});
-
 const isBottomPaneVisible = computed(() => {
   return (windowSize.height * bottomPaneHeightPercentage.value) / 100 >= tabHeaderHeight;
 });
 
+const recordPaneVisiable = computed(() => {
+  return !isNarrowDisplay();
+});
+
 const boardPaneMaxSize = computed(() => {
-  if (isNarrowDisplay.value) {
+  if (isNarrowDisplay()) {
     return new RectSize(windowSize.width - splitterWidth - margin, windowSize.height);
   }
 
@@ -170,22 +139,6 @@ const recordPaneStyle = computed(() => {
 
 const bottomPaneHeightPercentage = computed(() => {
   return 100 - topPaneHeightPercentage.value;
-});
-
-const tabPaneSize = computed(() => {
-  return new RectSize(
-    appSetting.tabPaneType === TabPaneType.SINGLE
-      ? windowSize.width
-      : (windowSize.width - splitterWidth) * (bottomLeftPaneWidthPercentage.value / 100),
-    (windowSize.height - splitterWidth) * (bottomPaneHeightPercentage.value / 100),
-  );
-});
-
-const tabPaneSize2 = computed(() => {
-  return new RectSize(
-    (windowSize.width - splitterWidth) * (1.0 - bottomLeftPaneWidthPercentage.value / 100),
-    (windowSize.height - splitterWidth) * (bottomPaneHeightPercentage.value / 100),
-  );
 });
 </script>
 
