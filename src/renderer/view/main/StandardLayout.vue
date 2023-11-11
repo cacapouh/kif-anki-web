@@ -15,66 +15,10 @@
               :max-size="boardPaneMaxSize"
               @resize="onBoardPaneResize"
             />
-            <RecordPane :style="recordPaneStyle" />
+            <RecordPane v-show="!isNarrowDisplay" :style="recordPaneStyle" />
           </div>
-          <!-- <button
-            v-if="!isBottomPaneVisible"
-            class="unhide-tabview-button"
-            @click="onUnhideTabView"
-          >
-            <Icon :icon="IconType.ARROW_UP" />
-            <span>{{ t.expandTabView }}</span>
-          </button> -->
         </div>
       </Pane>
-      <!-- <Pane :size="bottomPaneHeightPercentage">
-        <TabPane
-          v-if="appSetting.tabPaneType === TabPaneType.SINGLE"
-          class="full"
-          :size="tabPaneSize"
-          :visible-tabs="[
-            Tab.RECORD_INFO,
-            Tab.COMMENT,
-            Tab.SEARCH,
-            Tab.PV,
-            Tab.CHART,
-            Tab.PERCENTAGE_CHART,
-          ]"
-          :active-tab="appSetting.tab"
-          :display-minimize-toggle="true"
-          @on-change-tab="onChangeTab"
-          @on-minimize="onMinimizeTab"
-        />
-        <Splitpanes
-          v-else
-          class="bottom-frame"
-          vertical
-          :dbl-click-splitter="false"
-          @resize="onResizeBottom"
-          @resized="onResizedBottom"
-        >
-          <Pane :size="bottomLeftPaneWidthPercentage">
-            <TabPane
-              class="full"
-              :size="tabPaneSize"
-              :visible-tabs="[Tab.RECORD_INFO, Tab.SEARCH, Tab.PV]"
-              :active-tab="appSetting.tab"
-              @on-change-tab="onChangeTab"
-            />
-          </Pane>
-          <Pane>
-            <TabPane
-              class="full"
-              :size="tabPaneSize2"
-              :visible-tabs="[Tab.COMMENT, Tab.CHART, Tab.PERCENTAGE_CHART]"
-              :active-tab="appSetting.tab2"
-              :display-minimize-toggle="true"
-              @on-change-tab="onChangeTab2"
-              @on-minimize="onMinimizeTab"
-            />
-          </Pane>
-        </Splitpanes>
-      </Pane> -->
     </Splitpanes>
   </div>
 </template>
@@ -184,11 +128,19 @@ const onResizedBottom = (panes: { size: number }[]) => {
   updateAppSetting({ bottomLeftPaneWidthPercentage: newValue });
 };
 
+const isNarrowDisplay = computed(() => {
+  return windowSize.width < 600;
+});
+
 const isBottomPaneVisible = computed(() => {
   return (windowSize.height * bottomPaneHeightPercentage.value) / 100 >= tabHeaderHeight;
 });
 
 const boardPaneMaxSize = computed(() => {
+  if (isNarrowDisplay.value) {
+    return new RectSize(windowSize.width - splitterWidth - margin, windowSize.height);
+  }
+
   return new RectSize(
     Math.max(windowSize.width - minRecordWidth - margin * 2, 0),
     Math.max(
