@@ -38,11 +38,11 @@
         </div>
       </div>
       <div class="url-background">
-        &nbsp;棋譜暗記用URL:
-        <a :href="`${url}`">{{ truncate(url) }}</a>
-        <br />
-        <button style="padding:10px;width: 100%;" @click="copyRecordKIFUrl">棋譜暗記用URLをコピー</button>
-        <br />
+        <div v-if="isCreateMode">
+          <span>&nbsp;棋譜暗記用URL: <a :href="`${url}`">{{ truncate(url) }}</a><br /></span>
+          <button style="padding:10px;width: 100%;" @click="copyRecordKIFUrl">棋譜暗記用URLをコピー</button>
+          <br />
+        </div>
         <button style="padding:10px;width: 100%;" @click="redirectToNewKifPage">新規棋譜作成</button>
       </div>
     </div>
@@ -149,13 +149,8 @@ const emit = defineEmits<{
 const moveList = ref(null as HTMLDivElement | null);
 const branchList = ref();
 
-const modeText = computed(() => {
-  if (store.isCreateMode()) {
-    return "棋譜作成モード";
-  } else {
-    return "棋譜暗記モード";
-  }
-});
+const isCreateMode = store.isCreateMode();
+const modeText = isCreateMode ? "棋譜作成モード" : "棋譜暗記モード";
 
 const goBegin = () => {
   if (props.operational) {
