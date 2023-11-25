@@ -989,6 +989,17 @@ class Store {
     return false;
   }
 
+  doMoveUntilOffset(): void {
+    const currentUrl = new URL(location.href);
+    const offsetParam = currentUrl.searchParams.get("offset");
+    if (offsetParam) {
+      const offset = parseInt(offsetParam);
+      while (this.recordManager.record.length < offset) {
+        this.doNextMove();
+      }
+    }
+  }
+
   doFirstMoveWhenFlip(): void {
     if (this.recordManager.record.length == 0) {
       const currentUrl = new URL(location.href);

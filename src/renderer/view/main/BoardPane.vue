@@ -241,6 +241,7 @@ onMounted(() => {
   installHotKeyForMainWindow(leftControl.value);
   initFlip();
   store.doFirstMoveWhenFlip();
+  store.doMoveUntilOffset();
 });
 
 onUpdated(() => {
