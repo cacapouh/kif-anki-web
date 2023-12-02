@@ -686,6 +686,11 @@ class Store {
     }
   }
 
+  isBoth(): boolean {
+    const searchParams = new URLSearchParams(window.location.search);
+    return searchParams.get("both") == "true";
+  }
+
   doMove(move: Move): MoveResult | undefined {
     if (this.appState !== AppState.NORMAL && this.appState !== AppState.RESEARCH) {
       return;
@@ -700,7 +705,7 @@ class Store {
       const appSetting = useAppSetting();
       if (this.isCorrectMove(this.getRecordUSIAll(data))) {
         playPieceBeat(appSetting.pieceVolume);
-        if (this.doNextMove() === MoveResult.Finish) {
+        if (!this.isBoth() && this.doNextMove() === MoveResult.Finish) {
           return MoveResult.Finish;
         }
         return MoveResult.Correct;
